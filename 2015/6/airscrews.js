@@ -14,28 +14,34 @@ var calculatePart = function(x, y, size) {
         sum = part;
     } else {
         part = PARTS['r-' + (x - 1) + '-' + y + '-' + size];
-//        if (false) {
         if (part !== undefined) {
             x1 = x - 1;
             x2 = x1 + size;
-//            console.log('para r-' + x + '-' + y + '-' + size + ' reciclo r-' + x1 + '-' + y + '-' + size + '=' + part);
             sum = part;
             for (var k = y; k < y + size; k++) {
-//                console.log('resto %d', DATA[k][x1]);
                 sum -= DATA[k][x1];
-//                console.log('sumo %d', DATA[k][x2]);
                 sum += DATA[k][x2];
             }
             PARTS['r-' + x + '-' + y + '-' + size] = sum;
-//            console.log('reciclado r-' + x + '-' + y + '-' + size + '=' + sum);
         } else {
-            for (var k = y; k < y + size; k++) {
-                for (var l = x; l < x + size; l++) {
-                    sum += DATA[k][l];
+            part = PARTS['r-' + x + '-' + (y - 1) + '-' + size];
+            if (part !== undefined) {
+                y1 = y - 1;
+                y2 = y1 + size;
+                sum = part;
+                for (var k = x; k < x + size; k++) {
+                    sum -= DATA[y1][k];
+                    sum += DATA[y2][k];
                 }
+                PARTS['r-' + x + '-' + y + '-' + size] = sum;
+            } else {
+                for (var k = y; k < y + size; k++) {
+                    for (var l = x; l < x + size; l++) {
+                        sum += DATA[k][l];
+                    }
+                }
+                PARTS['r-' + x + '-' + y + '-' + size] = sum;
             }
-            PARTS['r-' + x + '-' + y + '-' + size] = sum;
-//            console.log('r-' + x + '-' + y + '-' + size + '=' + sum);
         }
     }
     return sum;
