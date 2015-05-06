@@ -14,6 +14,7 @@ var calculatePart = function(x, y, size) {
         sum = part;
     } else {
         part = PARTS['r-' + (x - 1) + '-' + y + '-' + size];
+        delete PARTS['r-' + (x - 1) + '-' + y + '-' + size];
         if (part !== undefined) {
             x1 = x - 1;
             x2 = x1 + size;
@@ -25,6 +26,7 @@ var calculatePart = function(x, y, size) {
             PARTS['r-' + x + '-' + y + '-' + size] = sum;
         } else {
             part = PARTS['r-' + x + '-' + (y - 1) + '-' + size];
+            delete PARTS['r-' + x + '-' + (y - 1) + '-' + size];
             if (part !== undefined) {
                 y1 = y - 1;
                 y2 = y1 + size;
@@ -60,6 +62,7 @@ var printAirscrew = function(index, myCase) {
     var totalSize = 2 * partSize + 1;
 
     var max = 0;
+    PARTS = {};
     for (var i = x0; i <= x1 - totalSize + 1; i++) {
         for (var j = y0; j <= y1 - totalSize + 1; j++) {
             var sum = calculateValue(i, j, partSize);
