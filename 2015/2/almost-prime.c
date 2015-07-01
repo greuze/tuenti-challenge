@@ -15,6 +15,8 @@
 // Why using int_fast32_t instead is so slow?
 typedef unsigned int n_type;
 
+n_type *firstDivisors;
+
 void readInputFile(const char *filename, int *n, n_type **cases) {
     FILE * fp;
     char * line = NULL;
@@ -46,7 +48,7 @@ void readInputFile(const char *filename, int *n, n_type **cases) {
 	free(line);
 }
 
-n_type getFirstDivisor(n_type number) {
+n_type calculateFirstDivisor(n_type number) {
 	n_type i;
 	double limit = sqrt(number);
 	for (i = 2; i <= limit; i++) {
@@ -55,6 +57,17 @@ n_type getFirstDivisor(n_type number) {
 		}
 	}
 	return 0;
+}
+
+n_type getFirstDivisor(n_type number) {
+	n_type firstDivisor = firstDivisors[number];
+	if (firstDivisor == -1) {
+		firstDivisor = calculateFirstDivisor(number);
+		firstDivisors[number] = firstDivisor;
+		return firstDivisor;
+	} else {
+		return firstDivisor;
+	}
 }
 
 // return is boolean: false = 0, true = 1
@@ -116,8 +129,17 @@ int main(int argc, char **argv) {
     n_type *cases;
     readInputFile(fileName, &numberOfCases, &cases);
 
+    // To save computing, store first divisors of numbers. -1 means not yet processed. 0 Means prime number
+    const int max = 100000001;
+    firstDivisors = malloc(sizeof(n_type) * max);
+    int i;
+    for (i = 0; i < max; i++) {
+        firstDivisors[i] = -1;
+    }
+
     printOutput(numberOfCases, cases);
 
+    free(firstDivisors);
     free(cases);
 
     return EXIT_SUCCESS;
