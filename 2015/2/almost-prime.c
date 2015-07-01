@@ -12,9 +12,10 @@
 #include <math.h>
 #include <errno.h>
 
-typedef unsigned long ulong;
+// Why using int_fast32_t instead is so slow?
+typedef unsigned int n_type;
 
-void readInputFile(const char *filename, int *n, ulong **cases) {
+void readInputFile(const char *filename, int *n, n_type **cases) {
     FILE * fp;
     char * line = NULL;
     size_t len = 0;
@@ -29,13 +30,13 @@ void readInputFile(const char *filename, int *n, ulong **cases) {
     read = getline(&line, &len, fp);
     sscanf(line, "%d", n);
     int m = *n * 2; // Each case has 2 numbers
-    *cases = malloc(sizeof(ulong) * m); // same as ulong cases[m];
+    *cases = malloc(sizeof(n_type) * m); // same as n_type cases[m];
 
     int i;
     for(i = 0; i < m;) {
         read = getline(&line, &len, fp);
-        ulong l1, l2;
-        sscanf(line, "%lu %lu", &l1, &l2);
+        n_type l1, l2;
+        sscanf(line, "%u %u", &l1, &l2);
         (*cases)[i++] = l1;
         (*cases)[i++] = l2;
     }
@@ -45,10 +46,10 @@ void readInputFile(const char *filename, int *n, ulong **cases) {
 	free(line);
 }
 
-ulong getFirstDivisor(ulong number) {
-	ulong i;
-	double sqrtNumber = sqrt(number);
-	for (i = 2; i <= sqrtNumber; i++) {
+n_type getFirstDivisor(n_type number) {
+	n_type i;
+	double limit = sqrt(number);
+	for (i = 2; i <= limit; i++) {
 		if (number % i == 0) {
 			return i;
 		}
@@ -57,14 +58,14 @@ ulong getFirstDivisor(ulong number) {
 }
 
 // return is boolean: false = 0, true = 1
-int isAlmostPrime(ulong number) {
-	ulong firstDivisor = getFirstDivisor(number);
+int isAlmostPrime(n_type number) {
+	n_type firstDivisor = getFirstDivisor(number);
 	if (firstDivisor == 0) {
 		// Number is prime
 		return 0;
 	}
 
-	ulong secondDivisor = getFirstDivisor(number / firstDivisor);
+	n_type secondDivisor = getFirstDivisor(number / firstDivisor);
 
 	if (secondDivisor == 0) {
 		// Is almost prime
@@ -75,8 +76,8 @@ int isAlmostPrime(ulong number) {
 	}
 }
 
-ulong getAlmostPrimeNumbers(ulong first, ulong last) {
-	ulong almostPrimeNumbers = 0;
+n_type getAlmostPrimeNumbers(n_type first, n_type last) {
+	n_type almostPrimeNumbers = 0;
 	int i;
     for (i = first; i <= last; i++) {
         if (isAlmostPrime(i)) {
@@ -86,14 +87,14 @@ ulong getAlmostPrimeNumbers(ulong first, ulong last) {
 	return almostPrimeNumbers;
 }
 
-void printOutput(int n, ulong *cases) {
+void printOutput(int n, n_type *cases) {
 	int m = n * 2; // Each case has 2 numbers
 	int i;
 	for(i = 0; i < m;) {
-		ulong first = cases[i++];
-		ulong last = cases[i++];
-		ulong result = getAlmostPrimeNumbers(first, last);
-		printf("%lu\n", result);
+		n_type first = cases[i++];
+		n_type last = cases[i++];
+		n_type result = getAlmostPrimeNumbers(first, last);
+		printf("%u\n", result);
 	}
 }
 
@@ -105,8 +106,14 @@ int main(int argc, char **argv) {
         fileName = argv[1];
     }
 
+    // Numbers must be smaller than 10^8 (requires 4 bytes)
+    if (sizeof(n_type) < 4) {
+        printf("Numbers will not fit in %lu bytes integer (change architecture or type)\n", sizeof(n_type));
+        return EXIT_FAILURE;
+    }
+
     int numberOfCases;
-    ulong *cases;
+    n_type *cases;
     readInputFile(fileName, &numberOfCases, &cases);
 
     printOutput(numberOfCases, cases);
