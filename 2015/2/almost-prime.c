@@ -9,11 +9,11 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <math.h>
 #include <errno.h>
 
-// Why using int_fast32_t instead is so slow?
-typedef unsigned int n_type;
+typedef int32_t n_type;
 
 n_type *firstDivisors;
 
@@ -60,10 +60,10 @@ n_type calculateFirstDivisor(n_type number) {
 }
 
 n_type getFirstDivisor(n_type number) {
-	n_type firstDivisor = firstDivisors[number];
+	n_type firstDivisor = firstDivisors[number - 1];
 	if (firstDivisor == -1) {
 		firstDivisor = calculateFirstDivisor(number);
-		firstDivisors[number] = firstDivisor;
+		firstDivisors[number - 1] = firstDivisor;
 		return firstDivisor;
 	} else {
 		return firstDivisor;
@@ -111,6 +111,19 @@ void printOutput(int n, n_type *cases) {
 	}
 }
 
+n_type getMaxNumber(int n, n_type *cases) {
+	n_type max = 0;
+	int m = n * 2; // Each case has 2 numbers
+	int i;
+	for(i = 1; i < m; i = i + 2) {
+		n_type last = cases[i];
+		if (last > max) {
+			max = last;
+		}
+	}
+	return max;
+}
+
 int main(int argc, char **argv) {
     char* fileName;
     if (argc == 1) { // No parameters
@@ -130,7 +143,7 @@ int main(int argc, char **argv) {
     readInputFile(fileName, &numberOfCases, &cases);
 
     // To save computing, store first divisors of numbers. -1 means not yet processed. 0 Means prime number
-    const int max = 100000001;
+    n_type max = getMaxNumber(numberOfCases, cases);
     firstDivisors = malloc(sizeof(n_type) * max);
     int i;
     for (i = 0; i < max; i++) {
