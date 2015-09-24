@@ -8,7 +8,7 @@ var numberOfCases = lines[0];
 
 var getFirstDivisor = function(number) {
     for (var i = 2; i <= Math.sqrt(number); i++) {
-        if (number % i == 0) {
+        if (number % i === 0) {
             return i;
         }
     }

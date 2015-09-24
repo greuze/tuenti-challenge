@@ -49,7 +49,7 @@ var bigBinary2BigInteger = function(myBinary) {
         }
     }
     return myInteger;
-}
+};
 
 var printBitterDinner = function(cpu, bitSequence) {
     var bits = parseInt(cpu.match(/^[0-9]+/)[0]);
@@ -92,8 +92,8 @@ var main = function() {
 
     var numberOfCPUs = lines[1];
 
-    for(var i = 2; i < parseInt(numberOfCPUs) + 2; i++) {
-        bitSequence = printBitterDinner(lines[i], bitSequence);
+    for(var j = 2; j < parseInt(numberOfCPUs) + 2; j++) {
+        bitSequence = printBitterDinner(lines[j], bitSequence);
     }
 };
 

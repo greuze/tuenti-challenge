@@ -50,12 +50,23 @@ var calculateMaximumMovements = function(shipsOrig) {
                 return movements;
             }
         }
-    };
+    }
 };
 
 var calculateGold = function(myShip, shipsOrig, solution) {
     var gold = myShip[2];
     var ships = JSON.parse(JSON.stringify(shipsOrig));
+
+    var filterOneRoute = function(i) {
+        return function(e) {
+            return e[0] === solution[i - 1] && e[1] === solution[i];
+        };
+    };
+    var filterOneIsland = function (i) {
+        return function(e) {
+            return e[0] === solution[i];
+        };
+    };
 
     for (var i = 1; i < solution.length; i++) {
         if (solution[i] === null) {
@@ -63,15 +74,11 @@ var calculateGold = function(myShip, shipsOrig, solution) {
             solution[i] = solution[i - 1]; // To avoid routes from null to anywhere
         } else {
             // Can be only one route
-            var route = routes.filter(function(e) {
-                return e[0] === solution[i - 1] && e[1] === solution[i];
-            })[0];
+            var route = routes.filter(filterOneRoute(i))[0];
             // Subtract route cost
             gold -= route[2];
             // Can be only one island
-            var destIsland = islands.filter(function(e) {
-                return e[0] === solution[i];
-            })[0];
+            var destIsland = islands.filter(filterOneIsland(i))[0];
             gold -= destIsland[1];
         }
         // Check for collision with other ships
@@ -103,6 +110,13 @@ var printOneTreasure = function(myShip, ships) {
     // Store all posible routes from starting island within max movements
     var solutions = [];
     var partialSolutions = [[myShip[3]]]; // Initial partial solution, with only one island
+
+    var filterRoutesFromSource = function(lastIsland) {
+        return function(e) {
+            return e[0] === lastIsland;
+        };
+    };
+
     for (var mov = 1; mov <= maxMovements; mov++) {
         var nextPartialSolutions = [];
         for (var i = 0; i < partialSolutions.length; i++) {
@@ -111,9 +125,7 @@ var printOneTreasure = function(myShip, ships) {
                 return e !== null;
             });
             var lastIsland = oldSol[oldSol.length - 1];
-            var routesFromSource = routes.filter(function(e) {
-                return e[0] === lastIsland;
-            });
+            var routesFromSource = routes.filter(filterRoutesFromSource(lastIsland));
 
             var staySol = JSON.parse(JSON.stringify(partialSolutions[i]));
             staySol.push(null); // Stay for pillage

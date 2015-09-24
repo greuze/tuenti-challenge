@@ -50,10 +50,10 @@ var bigDiv = function(divident, divisor) {
         leadingZeroes = getLeadingZeroes(part, divisor, remainder);
         intPartResult = Math.floor(part / divisor);
 
-        partResult += leadingZeroes + ((intPartResult == 0) ? '' : '' + intPartResult);
+        partResult += leadingZeroes + ((intPartResult === 0) ? '' : '' + intPartResult);
 
-        var remainder = part % divisor;
-        remainder = (remainder == 0) ? '' : '' + remainder;
+        var intRemainder = part % divisor;
+        remainder = (intRemainder === 0) ? '' : '' + intRemainder;
 
         divident = remainder + divident.substring(partLength);
     }
@@ -61,7 +61,7 @@ var bigDiv = function(divident, divisor) {
     leadingZeroes = getLeadingZeroes(divident, divisor, remainder);
     intPartResult = divident / divisor;
 
-    var result = partResult + leadingZeroes + ((intPartResult == 0) ? '' : '' + intPartResult);
+    var result = partResult + leadingZeroes + ((intPartResult === 0) ? '' : '' + intPartResult);
     return result.replace(/^0+/, '');
 };
 
