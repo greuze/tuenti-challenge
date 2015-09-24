@@ -110,15 +110,27 @@ var printOneTreasure = function(myShip, ships) {
     // Store all posible routes from starting island within max movements
     var solutions = [];
     var partialSolutions = [[myShip[3]]]; // Initial partial solution, with only one island
+    var nextPartialSolutions;
 
     var filterRoutesFromSource = function(lastIsland) {
         return function(e) {
             return e[0] === lastIsland;
         };
     };
+    var addNewRoutes = function(i) {
+        return function(route) {
+            var newSol = JSON.parse(JSON.stringify(partialSolutions[i]));
+            newSol.push(route[1]);
+            if (route[1] == LAST_ISLAND) {
+                solutions.push(newSol);
+            } else {
+                nextPartialSolutions.push(newSol);
+            }
+        };
+    };
 
     for (var mov = 1; mov <= maxMovements; mov++) {
-        var nextPartialSolutions = [];
+        nextPartialSolutions = [];
         for (var i = 0; i < partialSolutions.length; i++) {
             var oldSol = partialSolutions[i];
             oldSol = oldSol.filter(function(e) { // Remove stays for pillage
@@ -131,15 +143,7 @@ var printOneTreasure = function(myShip, ships) {
             staySol.push(null); // Stay for pillage
             nextPartialSolutions.push(staySol);
             
-            routesFromSource.forEach(function(route) {
-                var newSol = JSON.parse(JSON.stringify(partialSolutions[i]));
-                newSol.push(route[1]);
-                if (route[1] == LAST_ISLAND) {
-                    solutions.push(newSol);
-                } else {
-                    nextPartialSolutions.push(newSol);
-                }
-            });
+            routesFromSource.forEach(addNewRoutes(i));
         }
         partialSolutions = nextPartialSolutions;
     }
