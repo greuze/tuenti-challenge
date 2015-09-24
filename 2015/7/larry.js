@@ -1,5 +1,5 @@
 var fs = require('fs');
-var game = require('./game-logic.js');
+var logic = require('./game-logic.js');
 
 var GIRLS = [];
 var RELS = [];
@@ -35,8 +35,8 @@ var main = function() {
         var rel = lines[i].split(' ');
         RELS.push(rel);
     }
-
-    game.printPerfectLarryMatchingAlgorithm(GIRLS, RELS);
+    var game = new logic.Game(GIRLS, RELS);
+    game.printPerfectLarryMatchingAlgorithm();
 };
 
 main();
