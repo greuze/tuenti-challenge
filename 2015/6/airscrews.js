@@ -52,11 +52,12 @@ var calculatePart = function(x, y, size) {
         sum = part;
     } else {
         part = getResult(x - 1, y, size);
+        var k;
         if (part !== undefined) {
             x1 = x - 1;
             x2 = x1 + size;
             sum = part;
-            for (var k = y; k < y + size; k++) {
+            for (k = y; k < y + size; k++) {
                 sum -= DATA[k][x1];
                 sum += DATA[k][x2];
             }
@@ -71,7 +72,7 @@ var calculatePart = function(x, y, size) {
                 sum -= getRow(x, y1, size);
                 setResult(x, y, size, sum);
             } else {
-                for (var k = y; k < y + size; k++) {
+                for (k = y; k < y + size; k++) {
                     sum += getRow(x, k, size);
                 }
                 setResult(x, y, size, sum);
@@ -113,14 +114,15 @@ var main = function() {
     var dataInput = fs.readFileSync('sheet.data').toString().split('\n');
 
     var dataLines = parseInt(dataInput[0].split(' ')[0]);
-    for(var i = 1; i <= dataLines; i++) {
+    var i;
+    for(i = 1; i <= dataLines; i++) {
         var line = dataInput[i].split(' ').map(toInt);
         DATA.push(line);
     }
 
     var cases = parseInt(input[0]);
 
-    for(var i = 1; i <= cases; i++) {
+    for(i = 1; i <= cases; i++) {
         var myCase = input[i].split(' ').map(toInt);
         printAirscrew(i, myCase);
     }
