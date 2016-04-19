@@ -3,3 +3,4 @@ testOutput
 submitInput
 submitOutput
 .*
+*.class
