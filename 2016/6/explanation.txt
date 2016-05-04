@@ -1,0 +1,1 @@
+Captured QR code with mobile phone, that took me to https://en.wikipedia.org/wiki/Piet_Mondrian, same name that an esoteric programming language (Piet), based on color. The code starts with top left corner, and cannot start with black, and only one corner not black is top right. Tries rotating and flipping, and that's it.
