@@ -1,0 +1,4 @@
+telnet steam-origin.contest.tuenti.net 9876
+
+GET /games/cat_fight/get_key HTTP/1.1
+Host: pre.steam-origin.contest.tuenti.net
