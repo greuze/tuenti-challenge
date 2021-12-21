@@ -1,4 +1,3 @@
 # Tuenti challenges
-Solutions to some [Tuenti Challenges](https://contest.tuenti.net/)
+Solutions to some [Tuenti Challenges](https://contest.tuenti.net/) renamed to [Code Challenge](https://codechallenge.0x14.net)
 
-[![bitHound Score](https://www.bithound.io/github/greuze/tuenti-challenge/badges/score.svg)](https://www.bithound.io/github/greuze/tuenti-challenge)
